@@ -17,9 +17,10 @@
            "esri/layers/GraphicsLayer",
            "esri/geometry/Polyline",
            "esri/geometry/Polygon",
-           "esri/layers/FeatureLayer"
+           "esri/layers/FeatureLayer",
+           "esri/widgets/Editor"
           ], 
-           function(esriConfig, Map, MapView, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer) {
+           function(esriConfig, Map, MapView, Graphic, GraphicsLayer, Polyline, Polygon, FeatureLayer,Editor) {
     esriConfig.apiKey = "AAPK81b7cca05fd44c15a03618aa1d5dd08bZ1H0FAlNGuWt3LBhlRWCK906HeAPjeUnUsp30Hja37HR_MwAO3BPqQO2D-rMlJTE"
 
     const map = new Map({ 
@@ -243,6 +244,31 @@
     labelingInfo: [airportLabels] //adding the labels
   });
   map.add(militaryAirportLayer);
+
+  //adding the const for the feature layer
+  const myAirports = new FeatureLayer({
+    url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/My_Airports_GEOG576/FeatureServer",
+ 
+  //adding the popup here
+    outFields: ["iata_code"],
+  });
+
+  //adding the feature layer to the map
+  map.add(myAirports);
+
+  // Set the point layer's LayerInfo
+  const pointInfos = {
+    layer: myAirports
+  }
+
+  // Begin Editor constructor
+  const editor = new Editor({
+    view: view,
+    layerInfos: [pointInfos]
+  }); // End Editor constructor
+
+  // Add the widget to the view
+  view.ui.add(editor, "top-right");
 
   });
  </script>
